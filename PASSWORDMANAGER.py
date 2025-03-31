@@ -1,12 +1,17 @@
 ### LIBRARIES ###
 import sqlite3
 import init_db as db
+import os
+import passwordStorage
 from datetime import datetime as dt
 from argon2 import PasswordHasher
 ph = PasswordHasher()
 
 
 ### FUNCTIONS ###
+
+def clear_screen():
+    os.system('cls')  # Windows uses 'cls' to clear screen
 
 # prints welcome window
 def welcome():
@@ -266,18 +271,23 @@ def main():
 
     while True:
         # print directory
+        clear_screen()
         directory()
 
         # directory input
         directory_selection = str(input("What would you like to do?: "))
 
         # error handling
-        while directory_selection not in ["1", "2", "3", "4"]: # #TBA with more services 
+        while directory_selection not in ["1", "2", "3",]: # #TBA with more services 
             print("Error: Please enter a correct directory number between 1 to 4.")
             directory_selection = str(input("What would you like to do?: "))
 
+        if directory_selection == "1":
+            clear_screen
+            passwordStorage.addPassword()
+
         # Add your directory option handling here
-        if directory_selection == "4":
+        if directory_selection == "3":
             print("Goodbye!")
             break
 
