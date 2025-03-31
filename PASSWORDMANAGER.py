@@ -25,11 +25,9 @@ def directory():
     print("======================================")
     print("|              Servies             |")
     print("======================================")
-    print("1. Youtube")
-    print("2. Twitter")
-    print("3. Snapchat")
-    print("4. Gmail")
-    print("4. Exit")
+    print("1. Add Password")
+    print("2. View Passwords")
+    print("3. Exit")
 
 
 ## LOGIN / REGISTRATION
