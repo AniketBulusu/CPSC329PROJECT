@@ -18,7 +18,7 @@ interface UserData{
 class logic {
     private store: Store
     // readonly = final 
-    private readonly saltRounds = 10 //number of iterations for the hashing algorithm to run
+    private readonly saltRounds = 100 //number of iterations for the hashing algorithm to run (much higher in real world applications)
 
     constructor(){
         this.store = new Store({
@@ -27,7 +27,9 @@ class logic {
     }
 
     private hashPassword(password: string): string {
-        return ''
+        const salt = crypto.randomBytes(16).toString('hex') //create a random 16 byte (32 bit) hexadecimal format salt string
+        const hash = crypto.pbkdf2Sync(password, salt, this.saltRounds, 64, 'sha512').toString('hex') //uses sha512 algorithm to create a secure hashed version of the password
+        return `${salt}:${hash}`
     }
 
     private verifyPassword(password:string, hashedPassword: string): boolean {
@@ -35,6 +37,27 @@ class logic {
     }
 
     async createUser(username: string, masterPassword: string): Promise<boolean>{
+
+    try{
+        if(this.store.has(username)){
+            return false
+        }
+        //hash the password
+        const hashedPassword = this.hashPassword(masterPassword)
+
+        //create the user data for this username
+        const userData: UserData = {
+            masterPassword: hashedPassword,
+            entries: []
+        }
+
+        //store the username and the data in db. 
+        this.store.set(username, userData)
+        return true
+    }catch(error){
+        throw error
+    }
+
         return true
     }
 
