@@ -85,22 +85,54 @@ class logic {
      * @returns 
      */
     async verifyUser(username: string, masterPassword: string): Promise<boolean>{
-        return true
+        const userData = this.store.get(username) as UserData | undefined
+        if(!userData){
+            return false
+        }
+        return this.verifyPassword(masterPassword, userData.masterPassword)
     }
 
     async getEntries(username: string): Promise<PasswordEntry[]>{
+      const userData = this.store.get(username) as UserData | undefined
+      if(!userData){
         return []
+      }
+      return userData.entries
     }
 
     async addEntry(username: string, entry: PasswordEntry): Promise<boolean>{
+        const userData = this.store.get(username) as UserData | undefined
+        if(!userData){
+            return false
+        }
+        userData.entries.push(entry)
+        this.store.set(username, userData)
         return true
     }
 
     async updateEntry(username: string, entryId: string, updatedEntry: PasswordEntry): Promise<boolean>{
+        const userData = this.store.get(username) as UserData | undefined 
+        if(!userData){
+            return false
+        }
+
+        const index = userData.entries.findIndex(e=> e.id === entryId)
+        if(index === -1){
+            return false
+        }
+
+        userData.entries[index] = updatedEntry
+        this.store.set(username, userData)
         return true
     }
 
     async deleteEntry(username: string, entryId: string): Promise<boolean>{
+        const userData = this.store.get(username) as UserData | undefined 
+        if(!userData){return false}
+
+        userData.entries = userData.entries.filter(e => e.id !== entryId)
+
+        this.store.set(username, userData)
         return true
     }
 
