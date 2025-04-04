@@ -25,17 +25,37 @@ class logic {
             name: 'passwordStorage', defaults: {}
         })
     }
-
+    /**
+     * hashes the password through 100 salt rounds using the sha512 algorithm
+     * @param password 
+     * @returns string
+     */
     private hashPassword(password: string): string {
         const salt = crypto.randomBytes(16).toString('hex') //create a random 16 byte (32 bit) hexadecimal format salt string
         const hash = crypto.pbkdf2Sync(password, salt, this.saltRounds, 64, 'sha512').toString('hex') //uses sha512 algorithm to create a secure hashed version of the password
         return `${salt}:${hash}`
     }
-
+    /**
+     * verifies that the entered password matches the correct password by rehashing the input password with the stored salt. 
+     * @param password 
+     * @param hashedPassword 
+     * @returns 
+     */
     private verifyPassword(password:string, hashedPassword: string): boolean {
-        return true
-    }
+        const [salt, hash] = hashedPassword.split(':')
 
+        const verifyHash = crypto.pbkdf2Sync(password, salt, this.saltRounds, 64, 'sha512').toString('hex')
+
+        const isValid = hash === verifyHash 
+
+        return isValid
+    }
+    /**
+     * creates a new user and stores it in the electron store 
+     * @param username 
+     * @param masterPassword 
+     * @returns 
+     */
     async createUser(username: string, masterPassword: string): Promise<boolean>{
 
     try{
@@ -57,10 +77,13 @@ class logic {
     }catch(error){
         throw error
     }
-
-        return true
     }
-
+    /**
+     * uses verifyPassword function to check that the master password matches the username during login 
+     * @param username 
+     * @param masterPassword 
+     * @returns 
+     */
     async verifyUser(username: string, masterPassword: string): Promise<boolean>{
         return true
     }
