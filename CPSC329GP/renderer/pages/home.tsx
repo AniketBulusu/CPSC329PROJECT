@@ -12,7 +12,7 @@ import { PasswordEntry } from '../types/electron'
 export default function HomePage() {
   // variable declaration
   const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
+  const [masterPassword, setPassword] = useState('')
   const [error, setError] = useState('')
   const [isNewUser, setIsNewUser] = useState(false)
   const router = useRouter()
@@ -24,13 +24,13 @@ export default function HomePage() {
 
     try{
       if(isNewUser){
-        const created = await window.electron.createUser(username, password)
+        const created = await window.electron.createUser(username, masterPassword)
         if(!created){
           setError('Username already exists') 
           return}
       } 
       else{
-        const verified = await window.electron.verifyUser(username, password)
+        const verified = await window.electron.verifyUser(username, masterPassword)
         if(!verified){
           setError('Invalid username or password')
           return
@@ -199,7 +199,7 @@ export default function HomePage() {
                 required
                 style={styles.input}
                 placeholder="Enter your password"
-                value={password}
+                value={masterPassword}
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>

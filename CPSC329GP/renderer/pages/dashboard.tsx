@@ -41,7 +41,8 @@ export default function DashboardPage(){
         const entry: PasswordEntry = { ...newEntry, id}
 
         try{
-            const succes = await window.electron
+            const succes = await window.electron.addEntry(currentUser, entry)
+            
         }catch(error){
 
         }

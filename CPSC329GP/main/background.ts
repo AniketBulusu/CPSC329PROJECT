@@ -2,7 +2,6 @@ import path from 'path'
 import { app, ipcMain } from 'electron'
 import serve from 'electron-serve'
 import { createWindow } from './helpers'
-import Store from 'electron-store'
 import { backendLogic } from './logic'
 
 const isProd = process.env.NODE_ENV === 'production'
@@ -12,8 +11,6 @@ if (isProd) {
 } else {
   app.setPath('userData', `${app.getPath('userData')} (development)`)
 }
-
-const store = new Store()
 
 ;(async () => {
   await app.whenReady()
@@ -44,7 +41,8 @@ ipcMain.on('message', async (event, arg) => {
 })
 
 ipcMain.handle('create-user', async(event, {username, masterPassword}) => {
-  return backendLogic.createUser(username, masterPassword)
+  const result = await backendLogic.createUser(username, masterPassword)
+  return result
 })
 
 ipcMain.handle('verify-user', async (event, { username, masterPassword }) => {
