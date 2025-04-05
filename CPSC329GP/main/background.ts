@@ -49,16 +49,16 @@ ipcMain.handle('verify-user', async (event, { username, masterPassword }) => {
   return backendLogic.verifyUser(username, masterPassword)
 })
 
-ipcMain.handle('get-entries', async (event, username) => {
-  return backendLogic.getEntries(username)
+ipcMain.handle('get-entries', async (event, username, masterPassword) => {
+  return backendLogic.getEntries(username, masterPassword)
 })
 
-ipcMain.handle('add-entry', async (event, { username, entry }) => {
-  return backendLogic.addEntry(username, entry)
+ipcMain.handle('add-entry', async (event, { username, entry, masterPassword }) => {
+  return backendLogic.addEntry(username, entry, masterPassword)
 })
 
-ipcMain.handle('update-entry', async (event, { username, entryId, updatedEntry }) => {
-  return backendLogic.updateEntry(username, entryId, updatedEntry)
+ipcMain.handle('update-entry', async (event, { username, entryId, updatedEntry, masterPassword }) => {
+  return backendLogic.updateEntry(username, entryId, updatedEntry, masterPassword)
 })
 
 ipcMain.handle('delete-entry', async (event, { username, entryId }) => {

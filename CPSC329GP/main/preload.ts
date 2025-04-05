@@ -22,12 +22,12 @@ contextBridge.exposeInMainWorld('electron', {
     ipcRenderer.invoke('create-user', { username, masterPassword }),
   verifyUser: (username: string, masterPassword: string) =>
     ipcRenderer.invoke('verify-user', { username, masterPassword }),
-  getEntries: (username: string) =>
-    ipcRenderer.invoke('get-entries', username),
-  addEntries: (username: string, entry: any) =>
-    ipcRenderer.invoke('add-entry', { username, entry }),
-  updateEntry: (username: string, entryId: string, updatedEntry: any) =>
-    ipcRenderer.invoke('update-entry', { username, entryId, updatedEntry }),
+  getEntries: (username: string, masterPassword: string) =>
+    ipcRenderer.invoke('get-entries', username, masterPassword),
+  addEntries: (username: string, entry: any, masterPassword: string) =>
+    ipcRenderer.invoke('add-entry', { username, entry, masterPassword }),
+  updateEntry: (username: string, entryId: string, updatedEntry: any, masterPassword: string) =>
+    ipcRenderer.invoke('update-entry', { username, entryId, updatedEntry, masterPassword }),
   deleteEntry: (username: string, entryId: string) =>
     ipcRenderer.invoke('delete-entry', { username, entryId })
 });
