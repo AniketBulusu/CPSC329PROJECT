@@ -2,6 +2,8 @@ import path from 'path'
 import { app, ipcMain } from 'electron'
 import serve from 'electron-serve'
 import { createWindow } from './helpers'
+import Store from 'electron-store'
+import { backendLogic } from './logic'
 
 const isProd = process.env.NODE_ENV === 'production'
 
@@ -10,6 +12,8 @@ if (isProd) {
 } else {
   app.setPath('userData', `${app.getPath('userData')} (development)`)
 }
+
+const store = new Store()
 
 ;(async () => {
   await app.whenReady()
@@ -37,4 +41,28 @@ app.on('window-all-closed', () => {
 
 ipcMain.on('message', async (event, arg) => {
   event.reply('message', `${arg} World!`)
+})
+
+ipcMain.handle('create-user', async(event, {username, masterPassword}) => {
+  return backendLogic.createUser(username, masterPassword)
+})
+
+ipcMain.handle('verify-user', async (event, { username, masterPassword }) => {
+  return backendLogic.verifyUser(username, masterPassword)
+})
+
+ipcMain.handle('get-entries', async (event, username) => {
+  return backendLogic.getEntries(username)
+})
+
+ipcMain.handle('add-entry', async (event, { username, entry }) => {
+  return backendLogic.addEntry(username, entry)
+})
+
+ipcMain.handle('update-entry', async (event, { username, entryId, updatedEntry }) => {
+  return backendLogic.updateEntry(username, entryId, updatedEntry)
+})
+
+ipcMain.handle('delete-entry', async (event, { username, entryId }) => {
+  return backendLogic.deleteEntry(username, entryId)
 })
