@@ -12,19 +12,70 @@ interface PasswordEntry{
 // Interface defining structure for all user related data. 
 interface UserData{
     masterPassword: string
+    keyDerivationSalt: string;
     entries: PasswordEntry[]
 }
 
 class logic {
     private store: Store
     // readonly = final 
-    private readonly saltRounds = 100 //number of iterations for the hashing algorithm to run (much higher in real world applications)
+    private readonly saltRounds = 10000 //number of iterations for the hashing algorithm to run (much higher in real world applications)
 
     constructor(){
         this.store = new Store({
             name: 'passwordStorage', defaults: {}
         })
     }
+
+    /**
+     * creates random salt for encryption/derivation keys
+     * @returns string
+     */
+    private generateSalt(): string{
+        return crypto.randomBytes(16).toString('hex')
+    }
+
+    /**
+     * creates a unique encryption key from the master password 
+     * @param masterPassword 
+     * @param salt 
+     * @returns 
+     */
+    private deriveKey(masterPassword: string, salt: string): Buffer{
+        return crypto.pbkdf2Sync(masterPassword, salt, this.saltRounds, 32, 'sha512')
+    }
+    
+    /**
+     * encrypts any string text and returns the concatenation of the iv (as a string) and the encrypted string
+     * @param text 
+     * @param encryptionKey 
+     */
+    private encryptText(text: string, encryptionKey: Buffer): string {
+        const iv = crypto.randomBytes(16)
+        const cipher = crypto.createCipheriv('aes-256-cbc', encryptionKey, iv)  // use aes cbc (cipher block chaining) mode to encrypt string with random iv 
+        let encrypted = cipher.update(text, 'utf8', 'hex')  //take the text, read it as utf8 format, then format into hexadecimal readable format
+        encrypted += cipher.final('hex')    // any last padding bytes or remaining unprocessed data and finish encryption
+        const ivString = iv.toString('hex')
+        return `${ivString}:${encrypted}`
+    }
+    /**
+     * decrypts the encrypted string using the iv included in the encrypted string as well as the encryption key from the master password
+     * @param encryptedText 
+     * @param encryptionKey 
+     * @returns 
+     */
+    private decryptText(encryptedText: string, encryptionKey: Buffer): string{
+        const keyParts = encryptedText.split(':')
+        if(keyParts.length !== 2){throw new Error("Yo encryption fucked up g")}
+        const iv = Buffer.from(keyParts[0], 'hex')
+        const encryptedString = keyParts[1]
+        const decipher = crypto.createDecipheriv('aes-256-cbc', encryptionKey, iv) 
+        let decryptedText = decipher.update(encryptedString, 'hex', 'utf8')
+        decryptedText += decipher.final('utf8')
+        return decryptedText
+    }
+
+
     /**
      * hashes the password through 100 salt rounds using the sha512 algorithm
      * @param password 
@@ -62,12 +113,16 @@ class logic {
         if(this.store.has(username)){
             return false
         }
+
+        //make a new unique salt for key derivation
+        const keyDerivationSalt = this.generateSalt()
         //hash the password
         const hashedPassword = this.hashPassword(masterPassword)
 
         //create the user data for this username
         const userData: UserData = {
             masterPassword: hashedPassword,
+            keyDerivationSalt: keyDerivationSalt,
             entries: []
         }
 
@@ -92,25 +147,33 @@ class logic {
         return this.verifyPassword(masterPassword, userData.masterPassword)
     }
 
-    async getEntries(username: string): Promise<PasswordEntry[]>{
+    async getEntries(username: string, masterPassword: string): Promise<PasswordEntry[]>{
       const userData = this.store.get(username) as UserData | undefined
       if(!userData){
         return []
       }
-      return userData.entries
+      const encryptionKey = this.deriveKey(masterPassword, userData.keyDerivationSalt)
+      const decryptedEntries = userData.entries.map(entry=> ({
+        ...entry,
+        password: this.decryptText(entry.password, encryptionKey)
+      }))
+      return decryptedEntries
     }
 
-    async addEntry(username: string, entry: PasswordEntry): Promise<boolean>{
+    async addEntry(username: string, entry: PasswordEntry, masterPassword: string): Promise<boolean>{
         const userData = this.store.get(username) as UserData | undefined
         if(!userData){
             return false
         }
-        userData.entries.push(entry)
+        const encryptionKey = this.deriveKey(masterPassword, userData.keyDerivationSalt)
+        const encryptedPassword = this.encryptText(entry.password, encryptionKey)
+        const encryptedEntry: PasswordEntry = {...entry, password: encryptedPassword}
+        userData.entries.push(encryptedEntry)
         this.store.set(username, userData)
         return true
     }
 
-    async updateEntry(username: string, entryId: string, updatedEntry: PasswordEntry): Promise<boolean>{
+    async updateEntry(username: string, entryId: string, updatedEntry: PasswordEntry, masterPassword: string): Promise<boolean>{
         const userData = this.store.get(username) as UserData | undefined 
         if(!userData){
             return false
@@ -121,7 +184,11 @@ class logic {
             return false
         }
 
-        userData.entries[index] = updatedEntry
+        const encryptionKey = this.deriveKey(masterPassword, userData.keyDerivationSalt)
+        const encryptedPassword = this.encryptText(updatedEntry.password, encryptionKey)
+        const encryptedEntry: PasswordEntry = {...updatedEntry, password: encryptedPassword}
+
+        userData.entries[index] = encryptedEntry
         this.store.set(username, userData)
         return true
     }
@@ -131,7 +198,6 @@ class logic {
         if(!userData){return false}
 
         userData.entries = userData.entries.filter(e => e.id !== entryId)
-
         this.store.set(username, userData)
         return true
     }
