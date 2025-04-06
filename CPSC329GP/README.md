@@ -1,6 +1,6 @@
 # Nextron App
 
-This is a desktop application built using Nextron (Electron + Next.js). It runs as a native application on both Windows and macOS.
+This is a desktop application built using Nextron (Electron + Next.js). It is a Windows native application, but can be forcefully ran on Mac with some extra steps. 
 Safely stores keys using AES-256-CBC algorithms, along with proper salting practices
 
 ## How to Run
