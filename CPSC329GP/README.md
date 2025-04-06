@@ -1,38 +1,17 @@
-<p align="center"><img src="https://i.imgur.com/a9QWW0v.png"></p>
+# Nextron App
 
-## Usage
+This is a desktop application built using Nextron (Electron + Next.js). It runs as a native application on both Windows and macOS.
 
-### Create an App
+## How to Run
 
-```
-# with npx
-$ npx create-nextron-app my-app --example with-tailwindcss
+### On Windows
+Simply double-click the `.exe` file. No installation is required.
 
-# with yarn
-$ yarn create nextron-app my-app --example with-tailwindcss
+### On macOS
+1. Find the `.app` or `.dmg` in the `dist` folder.
+2. move the app to the `Applications` folder (optional).
+3. Open Terminal and run the following command:
 
-# with pnpm
-$ pnpm dlx create-nextron-app my-app --example with-tailwindcss
-```
-
-### Install Dependencies
-
-```
-$ cd my-app
-
-# using yarn or npm
-$ yarn (or `npm install`)
-
-# using pnpm
-$ pnpm install --shamefully-hoist
-```
-
-### Use it
-
-```
-# development mode
-$ yarn dev (or `npm run dev` or `pnpm run dev`)
-
-# production build
-$ yarn build (or `npm run build` or `pnpm run build`)
-```
+   ```bash
+   xattr -c /path/to/YourApp.app(or .dmg)```
+   
