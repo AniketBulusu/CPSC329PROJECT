@@ -3,151 +3,7 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { PasswordEntry } from '../types/electron'
 
-const styles = {
-  container: {
-    minHeight: '100vh',
-    background: 'linear-gradient(135deg, #667eea, #764ba2)',
-    display: 'flex',
-    flexDirection: 'column' as const,
-    alignItems: 'center',
-    padding: '40px',
-    color: '#333',
-  },
-  header: {
-    marginBottom: '20px',
-    color: 'white',
-    textAlign: 'center' as const,
-  },
-  logoutButton: {
-    padding: '8px 12px',
-    backgroundColor: '#e53e3e',
-    color: '#fff',
-    border: 'none',
-    borderRadius: '4px',
-    cursor: 'pointer',
-    fontSize: '14px',
-    marginTop: '10px',
-  },
-  card: {
-    backgroundColor: '#fff',
-    borderRadius: '8px',
-    padding: '20px',
-    width: '100%',
-    maxWidth: '600px',
-    boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
-    marginBottom: '20px',
-  },
-  title: {
-    fontSize: '24px',
-    marginBottom: '10px',
-  },
-  list: {
-    listStyleType: 'none' as const,
-    padding: 0,
-    margin: 0,
-  },
-  listItem: {
-    padding: '10px',
-    borderBottom: '1px solid #eee',
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  entryDetails: {
-    flex: 1,
-    paddingRight: '10px',
-  },
-  editPanel: {
-    width: '280px',
-    display: 'flex',
-    flexDirection: 'column' as const,
-    alignItems: 'flex-end',
-  },
-  editContainer: {
-    display: 'flex',
-    flexDirection: 'column' as const,
-    gap: '5px',
-    width: '100%',
-  },
-  inlineEditRow: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '8px',
-    marginBottom: '5px',
-  },
-  editLabel: {
-    fontWeight: 'bold' as const,
-    width: '80px',
-  },
-  editButtons: {
-    marginTop: '5px',
-    display: 'flex',
-    justifyContent: 'flex-end',
-    gap: '5px',
-  },
-  form: {
-    display: 'flex',
-    flexDirection: 'column' as const,
-  },
-  formGroup: {
-    marginBottom: '15px',
-    display: 'block',
-  },
-  label: {
-    marginBottom: '5px',
-    fontWeight: 'bold' as const,
-    display: 'block',
-  },
-  input: {
-    padding: '8px',
-    fontSize: '14px',
-    borderRadius: '4px',
-    border: '1px solid #ccc',
-    marginBottom: '5px',
-    display: 'block',
-    width: '100%',
-  },
-  button: {
-    padding: '8px 12px',
-    backgroundColor: '#667eea',
-    color: '#fff',
-    border: 'none',
-    borderRadius: '4px',
-    cursor: 'pointer',
-    fontSize: '14px',
-    marginRight: '8px',
-  },
-  deleteButton: {
-    backgroundColor: '#e53e3e',
-    padding: '6px 10px',
-    color: '#fff',
-    border: 'none',
-    borderRadius: '4px',
-    cursor: 'pointer',
-    fontSize: '12px',
-    marginLeft: '8px',
-  },
-  error: {
-    color: 'red',
-    marginBottom: '10px',
-  },
-  addEntryForm: {
-    display: 'flex',
-    flexDirection: 'column' as const,
-  },
-  addEntryRow: {
-    display: 'flex',
-    flexWrap: 'wrap' as const,
-    gap: '10px',
-    alignItems: 'flex-end',
-  },
-  compactFormGroup: {
-    display: 'flex',
-    flexDirection: 'column' as const,
-    flex: 1,
-    minWidth: '140px',
-  },
-}
+
 
 export default function Dashboard() {
   const router = useRouter()
@@ -275,6 +131,154 @@ export default function Dashboard() {
     router.push('/home')
   }
 
+
+  const styles = {
+    container: {
+      minHeight: '100vh',
+      background: 'linear-gradient(135deg, #667eea, #764ba2)',
+      display: 'flex',
+      flexDirection: 'column' as const,
+      alignItems: 'center',
+      padding: '40px',
+      color: '#333',
+    },
+    header: {
+      marginBottom: '20px',
+      color: 'white',
+      textAlign: 'center' as const,
+    },
+    logoutButton: {
+      padding: '8px 12px',
+      backgroundColor: '#e53e3e',
+      color: '#fff',
+      border: 'none',
+      borderRadius: '4px',
+      cursor: 'pointer',
+      fontSize: '14px',
+      marginTop: '10px',
+    },
+    card: {
+      backgroundColor: '#fff',
+      borderRadius: '8px',
+      padding: '20px',
+      width: '100%',
+      maxWidth: '600px',
+      boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+      marginBottom: '20px',
+    },
+    title: {
+      fontSize: '24px',
+      marginBottom: '10px',
+    },
+    list: {
+      listStyleType: 'none' as const,
+      padding: 0,
+      margin: 0,
+    },
+    listItem: {
+      padding: '10px',
+      borderBottom: '1px solid #eee',
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+    },
+    entryDetails: {
+      flex: 1,
+      paddingRight: '10px',
+    },
+    editPanel: {
+      width: '280px',
+      display: 'flex',
+      flexDirection: 'column' as const,
+      alignItems: 'flex-end',
+    },
+    editContainer: {
+      display: 'flex',
+      flexDirection: 'column' as const,
+      gap: '5px',
+      width: '100%',
+    },
+    inlineEditRow: {
+      display: 'flex',
+      alignItems: 'center',
+      gap: '8px',
+      marginBottom: '5px',
+    },
+    editLabel: {
+      fontWeight: 'bold' as const,
+      width: '80px',
+    },
+    editButtons: {
+      marginTop: '5px',
+      display: 'flex',
+      justifyContent: 'flex-end',
+      gap: '5px',
+    },
+    form: {
+      display: 'flex',
+      flexDirection: 'column' as const,
+    },
+    formGroup: {
+      marginBottom: '15px',
+      display: 'block',
+    },
+    label: {
+      marginBottom: '5px',
+      fontWeight: 'bold' as const,
+      display: 'block',
+    },
+    input: {
+      padding: '8px',
+      fontSize: '14px',
+      borderRadius: '4px',
+      border: '1px solid #ccc',
+      marginBottom: '5px',
+      display: 'block',
+      width: '100%',
+    },
+    button: {
+      padding: '8px 12px',
+      backgroundColor: '#667eea',
+      color: '#fff',
+      border: 'none',
+      borderRadius: '4px',
+      cursor: 'pointer',
+      fontSize: '14px',
+      marginRight: '8px',
+    },
+    deleteButton: {
+      backgroundColor: '#e53e3e',
+      padding: '6px 10px',
+      color: '#fff',
+      border: 'none',
+      borderRadius: '4px',
+      cursor: 'pointer',
+      fontSize: '12px',
+      marginLeft: '8px',
+    },
+    error: {
+      color: 'red',
+      marginBottom: '10px',
+    },
+    addEntryForm: {
+      display: 'flex',
+      flexDirection: 'column' as const,
+    },
+    addEntryRow: {
+      display: 'flex',
+      flexWrap: 'wrap' as const,
+      gap: '10px',
+      alignItems: 'flex-end',
+    },
+    compactFormGroup: {
+      display: 'flex',
+      flexDirection: 'column' as const,
+      flex: 1,
+      minWidth: '140px',
+    },
+  }
+
+  
   return (
     <div style={styles.container}>
       <Head>
