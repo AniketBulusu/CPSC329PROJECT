@@ -128,6 +128,7 @@ class logic {
 
         //store the username and the data in db. 
         this.store.set(username, userData)
+
         return true
     }catch(error){
         throw error

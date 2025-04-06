@@ -38,6 +38,7 @@ export default function HomePage() {
       }
       
       localStorage.setItem('currentUser', username)
+      sessionStorage.setItem('masterPassword', masterPassword)
       router.push('/dashboard')
     }catch(err: any){setError('An error occured. Please try again')}
   }

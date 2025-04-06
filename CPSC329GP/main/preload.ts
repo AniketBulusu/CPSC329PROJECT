@@ -24,7 +24,7 @@ contextBridge.exposeInMainWorld('electron', {
     ipcRenderer.invoke('verify-user', { username, masterPassword }),
   getEntries: (username: string, masterPassword: string) =>
     ipcRenderer.invoke('get-entries', username, masterPassword),
-  addEntries: (username: string, entry: any, masterPassword: string) =>
+  addEntry: (username: string, entry: any, masterPassword: string) =>
     ipcRenderer.invoke('add-entry', { username, entry, masterPassword }),
   updateEntry: (username: string, entryId: string, updatedEntry: any, masterPassword: string) =>
     ipcRenderer.invoke('update-entry', { username, entryId, updatedEntry, masterPassword }),
