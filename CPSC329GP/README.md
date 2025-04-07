@@ -2,6 +2,7 @@
 
 This is a desktop application built using Nextron (Electron + Next.js). It is a Windows native application, built SPECIFICALLY FOR WINDOWS. 
 However, it can be forcefully ran on Mac with some extra steps. (NOT RECOMMENDED!! VERY TEDIOUS)
+
 Safely stores keys using AES-256-CBC algorithms, along with proper salting practices
 
 ## How to Run
