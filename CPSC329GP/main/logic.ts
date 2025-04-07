@@ -66,12 +66,12 @@ class logic {
      */
     private decryptText(encryptedText: string, encryptionKey: Buffer): string{
         const keyParts = encryptedText.split(':')
-        if(keyParts.length !== 2){throw new Error("Yo encryption fucked up g")}
+        if(keyParts.length !== 2){throw new Error("Encryption fucked")}
         const iv = Buffer.from(keyParts[0], 'hex')
         const encryptedString = keyParts[1]
-        const decipher = crypto.createDecipheriv('aes-256-cbc', encryptionKey, iv) 
-        let decryptedText = decipher.update(encryptedString, 'hex', 'utf8')
-        decryptedText += decipher.final('utf8')
+        const decipher = crypto.createDecipheriv('aes-256-cbc', encryptionKey, iv) //just reverses the algorithm in encrpyt text with same key and iv
+        let decryptedText = decipher.update(encryptedString, 'hex', 'utf8') // read as hex format and output as uft8
+        decryptedText += decipher.final('utf8') // last padding bytes and remaining uprocessed data 
         return decryptedText
     }
 
@@ -95,9 +95,9 @@ class logic {
     private verifyPassword(password:string, hashedPassword: string): boolean {
         const [salt, hash] = hashedPassword.split(':')
 
-        const verifyHash = crypto.pbkdf2Sync(password, salt, this.saltRounds, 64, 'sha512').toString('hex')
+        const verifyHash = crypto.pbkdf2Sync(password, salt, this.saltRounds, 64, 'sha512').toString('hex') // hash the entered password with same salt as stored password
 
-        const isValid = hash === verifyHash 
+        const isValid = hash === verifyHash // check if the hash results are the same 
 
         return isValid
     }
@@ -114,9 +114,8 @@ class logic {
             return false
         }
 
-        //make a new unique salt for key derivation
-        const keyDerivationSalt = this.generateSalt()
-        //hash the password
+       
+        const keyDerivationSalt = this.generateSalt() //make a new unique salt for key derivation
         const hashedPassword = this.hashPassword(masterPassword)
 
         //create the user data for this username
@@ -134,6 +133,7 @@ class logic {
         throw error
     }
     }
+    
     /**
      * uses verifyPassword function to check that the master password matches the username during login 
      * @param username 
