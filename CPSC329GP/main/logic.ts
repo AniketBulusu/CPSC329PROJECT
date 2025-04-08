@@ -66,7 +66,7 @@ class logic {
      */
     private decryptText(encryptedText: string, encryptionKey: Buffer): string{
         const keyParts = encryptedText.split(':')
-        if(keyParts.length !== 2){throw new Error("Encryption fucked")}
+        if(keyParts.length !== 2){throw new Error("Encryption did not run as expected")}
         const iv = Buffer.from(keyParts[0], 'hex')
         const encryptedString = keyParts[1]
         const decipher = crypto.createDecipheriv('aes-256-cbc', encryptionKey, iv) //just reverses the algorithm in encrpyt text with same key and iv
@@ -133,7 +133,7 @@ class logic {
         throw error
     }
     }
-    
+
     /**
      * uses verifyPassword function to check that the master password matches the username during login 
      * @param username 
